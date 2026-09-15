@@ -1,0 +1,9 @@
+/* Página de notificaciones. Requiere marca.css, base.css y panel-crud.css. */
+.notif-lista{list-style:none}
+.notif-lista .notif-boton{padding:14px 20px}
+.notif-lista .notif-texto b{font-size:13.5px}
+.notif-lista .notif-texto span{font-size:12.5px}
+.notif-lista .tabla-vacia{list-style:none}
+@media (max-width:760px){
+  .notif-lista .notif-boton{padding:13px 14px}
+}

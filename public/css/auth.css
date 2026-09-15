@@ -1,0 +1,92 @@
+/* ==========================================================================
+   Acceso · hoja de estilos
+   Requiere marca.css (tokens de paleta, reset, botones y campos).
+   ========================================================================== */
+
+/* Esta hoja solo la carga la pantalla de acceso, asi que el body se puede
+   tratar como suyo: columna de alto de ventana con el pie al final.
+
+   svh y no vh: en iOS, 100vh mide la ventana COMO SI las barras del navegador
+   estuvieran recogidas, asi que la pagina nace mas alta que lo que se ve y
+   aparece scroll aunque no haya nada mas abajo (era justo el sintoma: habia
+   que arrastrar para leer el copyright). svh es la ventana con las barras
+   desplegadas, que es el minimo garantizado. La declaracion con vh queda
+   antes como respaldo para quien no entienda svh. */
+body{
+  min-height:100vh;
+  min-height:100svh;
+  display:flex;flex-direction:column;
+}
+
+.acceso{
+  /* Toma el hueco que deja el pie, sea el que sea: sin restar pixeles a mano */
+  flex:1;
+  display:flex;
+  padding:24px;
+  /* Franja diagonal de marca detrás de la tarjeta */
+  background:
+    linear-gradient(135deg,rgba(6,51,129,.06) 0 50%,transparent 50%),
+    var(--fondo);
+}
+.acceso-tarjeta{
+  margin:auto;
+  width:min(400px,100%);background:var(--papel);
+  border:1px solid var(--borde);border-radius:14px;overflow:hidden;
+  box-shadow:0 14px 40px rgba(4,32,90,.1);
+}
+.acceso-cabecera{
+  padding:26px 26px 20px;text-align:center;
+  border-bottom:1px solid var(--borde);
+}
+.acceso-cabecera .logo-marca{margin:0 auto}
+.acceso-cabecera h1{
+  margin-top:16px;font-size:19px;font-weight:600;
+  letter-spacing:-.3px;color:var(--azul);
+}
+.acceso-cabecera p{margin-top:3px;font-size:12.5px;color:var(--texto-suave)}
+
+.acceso-cuerpo{padding:22px 26px 26px}
+.acceso-cuerpo .alerta{margin-bottom:16px}
+.acceso-cuerpo .btn{width:100%;margin-top:6px;padding:10px 15px;font-size:13.5px}
+
+.recordarme{
+  display:flex;align-items:center;gap:8px;
+  font-size:12.5px;color:var(--texto-suave);margin-bottom:16px;cursor:pointer;
+}
+.recordarme input{width:15px;height:15px;accent-color:var(--azul);cursor:pointer}
+
+.acceso-pie{
+  margin-top:18px;text-align:center;
+  font-size:11.5px;color:var(--texto-suave);line-height:1.6;
+}
+
+@media (max-width:480px){
+  .acceso{padding:14px}
+  .acceso-cabecera{padding:22px 20px 17px}
+  .acceso-cuerpo{padding:20px}
+}
+
+/* ---------- Añadidos del Portafolio de Reportes BI ---------- */
+.acceso{position:relative;overflow:hidden}
+.acceso-escena{position:absolute;inset:0;pointer-events:none;overflow:hidden}
+.burbuja{
+  position:absolute;border-radius:50%;opacity:.16;filter:blur(2px);
+  background:radial-gradient(circle at 30% 30%,var(--azul-medio),var(--azul));
+  animation:flotar 14s ease-in-out infinite alternate;
+}
+.burbuja--1{width:340px;height:340px;top:-120px;right:-90px}
+.burbuja--2{width:220px;height:220px;bottom:-70px;left:-60px;background:radial-gradient(circle at 30% 30%,var(--rojo),var(--rojo-oscuro));animation-delay:-5s}
+.burbuja--3{width:120px;height:120px;top:30%;left:12%;animation-delay:-9s}
+@keyframes flotar{from{transform:translateY(0) scale(1)}to{transform:translateY(-26px) scale(1.06)}}
+.acceso-tarjeta{position:relative;z-index:1}
+.acceso-cuerpo .btn{gap:8px}
+
+.campo-clave{position:relative}
+.campo-clave input{padding-right:40px}
+.ver-clave{
+  position:absolute;right:6px;top:50%;transform:translateY(-50%);
+  width:30px;height:30px;border:none;border-radius:6px;background:transparent;
+  color:var(--texto-suave);cursor:pointer;display:inline-flex;align-items:center;justify-content:center;
+}
+.ver-clave:hover{background:var(--azul-tenue);color:var(--azul)}
+.ver-clave[aria-pressed="true"]{color:var(--azul)}

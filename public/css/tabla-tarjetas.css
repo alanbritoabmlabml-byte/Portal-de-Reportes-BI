@@ -1,0 +1,126 @@
+/* ==========================================================================
+   Tablas como tarjetas en pantalla estrecha
+
+   Cómo se usa:
+     <table class="… tabla-tarjetas">        la tabla que se convierte
+     <td class="… celda-titulo">             encabeza la ficha, sin rótulo
+     <td data-etiqueta="Columna">            rótulo delante del valor
+     <td class="… celda-bloque" data-…>      texto largo: rótulo encima
+     tabla-tarjetas--con-orden               si la cabecera es ordenable
+
+   IMPORTANTE: esta hoja va SIEMPRE al final de la lista de hojas de la
+   página. Sus reglas empatan en especificidad con las de cada tabla
+   (`table.actividades td`, `table.compromisos td`…) y el empate lo gana la
+   última hoja cargada. Es lo que evita tener que sembrar !important.
+   ========================================================================== */
+
+@media (max-width:760px){
+  /* Ya no hace falta arrastrar la tabla de lado a lado */
+  .tabla-scroll{overflow-x:visible}
+
+  table.tabla-tarjetas{min-width:0}
+
+  table.tabla-tarjetas,
+  table.tabla-tarjetas tbody,
+  table.tabla-tarjetas tr,
+  table.tabla-tarjetas td{display:block;width:auto}
+
+  /* La fila de edición está oculta hasta que se pide: el display:block de
+     arriba se la comería. */
+  table.tabla-tarjetas tr[hidden]{display:none}
+
+  /* Cada fila es una ficha. Columna flexible y no bloque, para que la celda
+     principal pueda subir al encabezado con order aunque en la tabla venga
+     en medio (ver .celda-titulo). */
+  table.tabla-tarjetas tbody tr{
+    display:flex;flex-direction:column;
+    padding:13px 15px;border-bottom:1px solid var(--borde);
+  }
+  table.tabla-tarjetas tbody tr:last-child{border-bottom:none}
+
+  /* Rótulo a la izquierda, valor a la derecha */
+  table.tabla-tarjetas td{
+    display:flex;align-items:baseline;justify-content:space-between;gap:12px;
+    padding:3px 0;border:none;
+    font-size:12px;text-align:right;
+  }
+  /* Las anchuras por columna son de la vista en tabla: en una ficha sobran.
+     Con el atributo [class] gana a `table.x .col-y` sin !important. */
+  table.tabla-tarjetas td[class]{width:auto;min-width:0;max-width:none}
+
+  table.tabla-tarjetas td::before{
+    content:attr(data-etiqueta);
+    flex:0 0 38%;text-align:left;
+    font-size:9.5px;font-weight:700;letter-spacing:.7px;text-transform:uppercase;
+    color:var(--azul);
+  }
+  /* Sin rótulo no se reserva sitio: celdas de acciones, fila vacía, edición */
+  table.tabla-tarjetas td:not([data-etiqueta])::before{content:none}
+
+  /* La celda principal encabeza la ficha, a todo el ancho y arriba */
+  table.tabla-tarjetas td.celda-titulo{
+    display:block;order:-1;min-width:0;margin-bottom:8px;text-align:left;
+    font-size:13.5px;font-weight:600;color:var(--tinta);line-height:1.35;
+  }
+  table.tabla-tarjetas td.celda-titulo::before{content:none}
+
+  /* Texto largo (comentarios, detalle de cambios): el rótulo encima y el
+     contenido a todo el ancho. En dos columnas quedaba en un canal de
+     cuatro palabras. */
+  table.tabla-tarjetas td.celda-bloque{
+    display:block;margin-top:7px;text-align:left;
+  }
+  table.tabla-tarjetas td.celda-bloque::before{
+    display:block;margin-bottom:3px;
+  }
+
+  /* La barra de avance son dos bloques dentro de la celda: como items de
+     flex se quedarían sin ancho, así que se le reserva uno. */
+  table.tabla-tarjetas td.col-avance{align-items:center}
+  table.tabla-tarjetas td.col-avance .avance-barra{
+    flex:0 0 92px;margin-top:0;
+  }
+
+  /* Los botones de acción, en su propia línea */
+  table.tabla-tarjetas td.col-acciones{
+    justify-content:flex-end;margin-top:9px;width:auto;
+  }
+
+  /* La fila de edición no es una ficha: es el formulario, a todo el ancho */
+  table.tabla-tarjetas tbody tr.fila-edicion{padding:0}
+  table.tabla-tarjetas tr.fila-edicion > td{padding:0;text-align:left}
+
+  table.tabla-tarjetas td.tabla-vacia{text-align:center}
+
+  /* ---------- Cabecera ----------
+     Sin ordenación no aporta nada en tarjetas. */
+  table.tabla-tarjetas thead{display:none}
+
+  /* Con ordenación se convierte en una fila de chips: son los MISMOS enlaces
+     de las cabeceras, así que no hay dos juegos que mantener. */
+  table.tabla-tarjetas--con-orden thead{display:block}
+  table.tabla-tarjetas--con-orden thead tr{
+    display:flex;align-items:center;flex-wrap:wrap;gap:6px;
+    padding:9px 15px;background:var(--azul-tenue);
+    border-bottom:1px solid var(--borde);
+  }
+  table.tabla-tarjetas--con-orden thead tr::before{
+    content:"Ordenar";
+    font-size:9.5px;font-weight:700;letter-spacing:.7px;text-transform:uppercase;
+    color:var(--texto-suave);
+  }
+  /* Lo que no es dato no se ordena */
+  table.tabla-tarjetas--con-orden thead th:not(.th-orden){display:none}
+  table.tabla-tarjetas--con-orden thead th.th-orden{
+    display:block;padding:0;border:none;background:transparent;
+  }
+  table.tabla-tarjetas--con-orden thead th.th-orden > a{
+    padding:4px 10px;border-radius:20px;
+    border:1px solid var(--borde);background:var(--papel);
+    font-size:11px;
+  }
+  table.tabla-tarjetas--con-orden thead th.th-orden--activa > a{
+    background:var(--azul);border-color:var(--azul);color:#fff;
+  }
+  table.tabla-tarjetas--con-orden thead th.th-orden--activa .th-flecha{color:#fff}
+}

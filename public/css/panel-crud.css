@@ -1,0 +1,168 @@
+/* ==========================================================================
+   Estructura común de las pantallas con CRUD en tabla (usuarios, actividades)
+   Requiere marca.css. Cada pantalla añade después su propia hoja con los
+   estilos de su tabla.
+   ========================================================================== */
+
+.contenido{max-width:1080px;margin:0 auto;padding:20px 24px 40px}
+.contenido--ancha{max-width:1500px}
+.contenido > .alerta{margin-bottom:16px}
+
+/* ---------- Panel ---------- */
+.tarjeta-panel{
+  background:var(--papel);border:1px solid var(--borde);
+  border-radius:12px;overflow:hidden;margin-bottom:20px;
+}
+.tarjeta-panel > header{
+  background:var(--azul);color:#fff;padding:15px 20px;
+  display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;
+}
+.tarjeta-panel > header h2{font-size:16.5px;font-weight:600;letter-spacing:-.2px}
+.tarjeta-panel > header p{font-size:12px;color:#b7c4de;margin-top:3px}
+.tarjeta-panel > header strong{color:#fff}
+
+/* ---------- Formularios ---------- */
+.form-alta{padding:18px 20px}
+.form-rejilla{display:grid;grid-template-columns:1fr 1fr;gap:0 16px}
+.form-rejilla .ancho-total{grid-column:1 / -1}
+.form-acciones{display:flex;justify-content:flex-end;gap:9px;margin-top:4px}
+
+/* ---------- Contenedor de tabla ---------- */
+.tabla-scroll{overflow-x:auto}
+/* Tope de alto con scroll propio, para listados que crecen sin límite.
+   Las cabeceras con position:sticky se anclan a este contenedor. */
+.tabla-scroll--alta{max-height:620px;overflow-y:auto}
+.tabla-scroll--alta::-webkit-scrollbar{width:10px;height:10px}
+.tabla-scroll--alta::-webkit-scrollbar-track{background:var(--azul-tenue)}
+.tabla-scroll--alta::-webkit-scrollbar-thumb{background:var(--azul-suave);border-radius:5px}
+.tabla-scroll--alta::-webkit-scrollbar-thumb:hover{background:var(--azul-medio)}
+.tabla-scroll--alta::-webkit-scrollbar-corner{background:var(--azul-tenue)}
+
+.acciones-celda{display:flex;gap:6px;justify-content:flex-end}
+
+/* ---------- Fila de edición desplegable ---------- */
+.fila-edicion > td{background:#fafbfe;padding:0}
+.fila-edicion[hidden]{display:none}
+.form-edicion{padding:16px 14px}
+.form-edicion .titulo-edicion{
+  font-size:10.5px;font-weight:700;letter-spacing:.9px;text-transform:uppercase;
+  color:var(--azul);margin-bottom:12px;
+}
+
+@media (max-width:760px){
+  .contenido{padding:16px 14px 30px}
+  .form-rejilla{grid-template-columns:1fr}
+  .tarjeta-panel > header{padding:13px 15px}
+  .tarjeta-panel > header h2{font-size:15px}
+  .tabla-scroll--alta{max-height:70vh}
+}
+
+/* ==========================================================================
+   Barra de filtros
+   ========================================================================== */
+.barra-filtros{
+  padding:14px 20px;background:#fafbfe;border-bottom:1px solid var(--borde);
+}
+.filtros-rejilla{
+  display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));
+  gap:0 14px;align-items:end;
+}
+/* Búsqueda e iniciativa merecen el doble de ancho que el resto */
+.filtros-rejilla .campo--ancho2{grid-column:span 2}
+.campo--filtro{margin-bottom:10px}
+.campo--filtro > label{font-size:9.5px;letter-spacing:.8px;margin-bottom:4px}
+.campo--filtro input,.campo--filtro select{padding:6px 9px;font-size:12.5px}
+.campo--casilla{display:flex;align-items:center;min-height:34px}
+.campo--casilla .casilla{margin:0;font-size:12.5px}
+.filtros-acciones{display:flex;justify-content:flex-end;gap:8px}
+
+/* ==========================================================================
+   Paginador
+   ========================================================================== */
+.paginador{
+  display:flex;align-items:center;justify-content:space-between;gap:14px;
+  flex-wrap:wrap;padding:12px 20px;border-top:1px solid var(--borde);
+}
+.paginador-cuenta{font-size:12px;color:var(--texto-suave);font-variant-numeric:tabular-nums}
+.paginador-cuenta strong{color:var(--tinta)}
+.paginador-botones{display:flex;align-items:center;gap:5px;flex-wrap:wrap}
+.paginador-btn{
+  display:inline-flex;align-items:center;justify-content:center;
+  min-width:31px;padding:5px 9px;border-radius:6px;
+  border:1px solid var(--borde);background:var(--papel);
+  font-size:12px;font-weight:600;color:var(--azul);text-decoration:none;
+  font-variant-numeric:tabular-nums;
+}
+a.paginador-btn:hover{background:var(--azul-tenue);border-color:var(--azul-suave)}
+.paginador-btn--activo{background:var(--azul);border-color:var(--azul);color:#fff}
+/* Los extremos deshabilitados son <span>, no <a>: no reaccionan al puntero */
+span.paginador-btn:not(.paginador-btn--activo){color:var(--azul-suave);background:#fafbfe}
+.paginador-puntos{padding:0 3px;color:var(--texto-suave);font-size:12px}
+
+@media (max-width:760px){
+  .barra-filtros{padding:12px 14px}
+  .filtros-rejilla{grid-template-columns:1fr}
+  .filtros-rejilla .campo--ancho2{grid-column:span 1}
+  .paginador{padding:12px 14px;justify-content:center}
+
+  /* Solo Anterior, la primera, la actual, la última y Siguiente: la lista
+     numerada entera no cabe y se pulsaba mal con el dedo. La actual se queda
+     porque es lo único que dice dónde estás. */
+  .paginador-puntos,
+  .paginador-btn--num:not(.paginador-btn--extremo):not(.paginador-btn--activo){display:none}
+}
+
+/* ==========================================================================
+   Región viva: resumen de resultados y estado de carga
+   ========================================================================== */
+.tabla-resumen{
+  display:flex;align-items:baseline;justify-content:space-between;gap:12px;
+  flex-wrap:wrap;padding:10px 20px;
+  border-bottom:1px solid var(--borde);background:var(--papel);
+  font-size:12px;color:var(--texto-suave);
+}
+.tabla-resumen strong{font-size:13.5px;color:var(--tinta);font-variant-numeric:tabular-nums}
+.tabla-resumen-nota{font-size:11.5px;color:var(--texto-suave)}
+.tabla-resumen-nota--alerta{color:var(--rojo-oscuro);font-weight:600}
+
+/* Mientras llega el fragmento la tabla se atenúa y deja de aceptar clics,
+   para que no se pulse dos veces la misma página del paginador. */
+.tabla-viva--cargando{opacity:.55;pointer-events:none}
+@media (prefers-reduced-motion:no-preference){
+  [data-tabla-viva]{transition:opacity .12s ease}
+}
+
+.tabla-vacia{
+  text-align:center;padding:34px;color:var(--texto-suave);font-style:italic;
+}
+
+/* Marca de cuenta sin acceso en el listado de usuarios */
+.sin-acceso{
+  display:inline-block;margin-left:6px;padding:1px 7px;border-radius:20px;
+  background:#eceff4;color:var(--texto-suave);
+  font-size:9.5px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;
+}
+
+@media (max-width:760px){
+  .tabla-resumen{padding:10px 14px}
+}
+
+/* El botón "Filtrar" sobra cuando los filtros se aplican al instante, pero se
+   conserva en el marcado como respaldo para navegación sin JavaScript. */
+.con-tabla-viva .filtros-acciones .btn--primario{display:none}
+/* Sin el botón, "Limpiar" queda solo: se alinea con el resto de la fila. */
+.con-tabla-viva .filtros-acciones:empty{display:none}
+
+/* ---------- Cabeceras ordenables ---------- */
+.th-orden{padding:0}
+.th-orden > a{
+  display:flex;align-items:center;gap:6px;
+  padding:11px 14px;color:inherit;text-decoration:none;
+  font:inherit;letter-spacing:inherit;text-transform:inherit;
+}
+.th-orden > a:hover{background:rgba(4,32,90,.06)}
+.th-orden > a:focus-visible{outline:2px solid var(--azul-medio);outline-offset:-2px}
+/* La flecha inactiva se insinúa; al ordenar por esa columna se afirma */
+.th-flecha{font-size:9px;opacity:.35;line-height:1}
+.th-orden--activa .th-flecha{opacity:1;color:var(--azul)}
+.th-orden--activa > a{color:var(--azul)}

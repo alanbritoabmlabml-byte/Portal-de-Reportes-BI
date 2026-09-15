@@ -1,0 +1,123 @@
+/* ==========================================================================
+   Página de un área de BI: lista de tableros con sus iframes
+   Requiere marca.css y base.css.
+   Escritorio: índice lateral + lista de paneles. Móvil: tarjetas plegadas.
+   ========================================================================== */
+
+.contenido{max-width:1080px;margin:0 auto;padding:20px 24px 40px}
+.contenido--ancha{max-width:1500px}
+.bi{display:flex;flex-direction:column;gap:18px}
+
+/* ---------- Cabecera del área ---------- */
+.area-cabecera{
+  display:flex;align-items:center;gap:18px;flex-wrap:wrap;
+  padding:20px 24px;border-radius:var(--radio);
+  background:var(--papel);border:1px solid var(--borde);box-shadow:var(--sombra-suave);
+  border-left:5px solid var(--rojo);
+}
+.area-cabecera-icono{
+  flex:none;display:inline-flex;align-items:center;justify-content:center;
+  width:64px;height:64px;border-radius:18px;
+  background:linear-gradient(135deg,var(--azul),var(--tinta));color:#fff;
+}
+.area-cabecera-texto{flex:1;min-width:200px}
+.migas{display:flex;align-items:center;gap:6px;font-size:11px;color:var(--texto-suave);margin-bottom:3px}
+.migas a{color:var(--texto-suave);text-decoration:none;font-weight:600}
+.migas a:hover{color:var(--azul)}
+.area-cabecera h2{font-size:22px;font-weight:600;color:var(--tinta);letter-spacing:-.3px}
+.area-cabecera p{font-size:12.5px;color:var(--texto-suave);margin-top:2px}
+.area-cabecera-acciones{display:flex;gap:8px;flex-wrap:wrap}
+
+/* ---------- Filtros ---------- */
+.bi-filtros{display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap}
+.saltar{display:inline-flex;align-items:center;gap:8px;font-size:11px;font-weight:600;color:var(--texto-suave);text-transform:uppercase;letter-spacing:.7px}
+.saltar select{
+  border:1px solid #c6d0e4;background:var(--papel);border-radius:8px;padding:7px 10px;
+  font-size:12.5px;color:var(--texto);min-width:180px;
+}
+
+/* ---------- Cuerpo: índice + lista ---------- */
+.bi-cuerpo{display:grid;grid-template-columns:230px minmax(0,1fr);gap:20px;align-items:start}
+.bi-indice{
+  position:sticky;top:84px;
+  padding:14px;border-radius:12px;background:var(--papel);border:1px solid var(--borde);
+}
+.bi-indice-titulo{font-size:10px;font-weight:700;letter-spacing:.9px;text-transform:uppercase;color:var(--texto-suave);margin-bottom:8px;padding:0 6px}
+.bi-indice ol{list-style:none;display:flex;flex-direction:column;gap:2px}
+.bi-indice a{
+  display:flex;align-items:center;gap:8px;padding:8px 9px;border-radius:8px;
+  font-size:12.5px;font-weight:500;color:var(--texto);text-decoration:none;line-height:1.3;
+  transition:background var(--transicion), color var(--transicion);
+}
+.bi-indice a .tipo{width:8px;height:8px;padding:0;border-radius:50%;flex:none;font-size:0}
+.bi-indice a:hover{background:var(--azul-tenue);color:var(--azul)}
+.bi-indice a.activo{background:var(--azul);color:#fff}
+
+.bi-lista{display:flex;flex-direction:column;gap:16px;min-width:0}
+
+/* ---------- Panel de un reporte ---------- */
+.reporte{
+  background:var(--papel);border:1px solid var(--borde);border-radius:var(--radio);
+  overflow:hidden;box-shadow:var(--sombra-suave);
+  transition:box-shadow var(--transicion), border-color var(--transicion);
+  scroll-margin-top:90px;
+}
+.reporte:target,.reporte.reporte--foco{border-color:var(--azul-suave);box-shadow:var(--sombra-alta)}
+.reporte-cabecera{
+  display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap;
+  padding:14px 18px;
+}
+.reporte-titulo{display:flex;flex-direction:column;gap:4px;min-width:0;flex:1}
+.reporte-titulo .tipo{align-self:flex-start}
+.reporte-titulo h3{font-size:15.5px;font-weight:600;color:var(--tinta);letter-spacing:-.2px}
+.reporte-titulo p{font-size:12.5px;color:var(--texto-suave)}
+.reporte-acciones{display:flex;gap:6px;flex-wrap:wrap;align-items:center}
+.reporte-demo{
+  padding:4px 9px;border-radius:12px;border:1px dashed #c77700;
+  font-size:10.5px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;color:#8a5200;background:#fdf2e0;
+}
+.reporte-abrir .icono{transition:transform var(--transicion)}
+.reporte--abierto .reporte-abrir .icono{transform:rotate(180deg)}
+
+/* Marco del iframe: 16:9 con tope de alto para no comerse la pantalla */
+.reporte-marco{
+  position:relative;border-top:1px solid var(--borde);background:var(--fondo);
+  aspect-ratio:16/9;max-height:78vh;min-height:320px;
+}
+.reporte-marco iframe{position:absolute;inset:0;width:100%;height:100%;border:0;display:block;background:#fff}
+.reporte-cargando{
+  position:absolute;inset:0;display:flex;align-items:center;justify-content:center;gap:10px;
+  font-size:12.5px;color:var(--texto-suave);
+}
+.reporte-cargando span{
+  width:18px;height:18px;border-radius:50%;
+  border:3px solid var(--azul-tenue);border-top-color:var(--azul);
+  animation:girar .8s linear infinite;
+}
+@keyframes girar{to{transform:rotate(360deg)}}
+.reporte-marco--listo .reporte-cargando{display:none}
+
+/* Pantalla completa del navegador */
+.reporte-marco:fullscreen{aspect-ratio:auto;max-height:none;background:#fff}
+.reporte-marco:fullscreen iframe{position:fixed;inset:0}
+
+/* ---------- Pantalla estrecha: tarjetas plegadas ---------- */
+@media (max-width:980px){
+  .bi-cuerpo{grid-template-columns:1fr}
+  .bi-indice{display:none}
+}
+@media (max-width:760px){
+  .contenido{padding:14px 14px 30px}
+  .area-cabecera{padding:16px;gap:12px}
+  .area-cabecera-icono{width:50px;height:50px;border-radius:14px}
+  .area-cabecera h2{font-size:18px}
+  .area-cabecera-acciones{width:100%}
+  .area-cabecera-acciones .btn,.area-cabecera-acciones form{flex:1}
+  .area-cabecera-acciones .btn{width:100%}
+  .reporte-cabecera{padding:13px 14px}
+  .reporte-acciones{width:100%}
+  .reporte-acciones .reporte-abrir{flex:1;margin-left:auto}
+  .reporte-marco{aspect-ratio:4/5;min-height:0;max-height:none}
+  .saltar{width:100%}
+  .saltar select{flex:1}
+}

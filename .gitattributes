@@ -1,0 +1,18 @@
+* text=auto eol=lf
+
+*.blade.php diff=html
+*.css diff=css
+*.html diff=html
+*.md diff=markdown
+*.php diff=php
+
+/.github export-ignore
+CHANGELOG.md export-ignore
+.styleci.yml export-ignore
+
+# Exportaciones de SharePoint que sirven de datos de arranque: una viene en
+# Windows-1252 y la otra en UTF-8 con BOM. Git no debe normalizarlas.
+/database/data/*.csv -text
+
+# Los .bat de arranque necesitan CRLF para que cmd.exe los lea bien.
+*.bat text eol=crlf

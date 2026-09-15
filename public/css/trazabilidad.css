@@ -1,0 +1,156 @@
+/* ==========================================================================
+   Trazabilidad · métricas, gráficos y bitácora
+   Una sola serie por gráfico: el color no distingue nada, solo marca el dato,
+   así que basta un azul que contraste con el papel en claro y en oscuro.
+   ========================================================================== */
+
+:root{
+  --serie:        #2b56a6;
+  --serie-suave:  #dfe7f6;
+  --pista:        #edeff3;
+}
+[data-tema="oscuro"]{
+  --serie:        #4f83db;
+  --serie-suave:  #24334d;
+  --pista:        #222a36;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-tema="claro"]){
+    --serie:#4f83db; --serie-suave:#24334d; --pista:#222a36;
+  }
+}
+
+/* ---------- Cifras grandes ---------- */
+.kpis{
+  display:grid; gap:14px; margin-bottom:18px;
+  grid-template-columns:repeat(auto-fit, minmax(min(190px, 100%), 1fr));
+}
+.kpi{
+  background:var(--papel); border:1px solid var(--borde); border-radius:var(--radio);
+  padding:16px 18px; box-shadow:var(--sombra-suave);
+  display:flex; flex-direction:column; gap:4px;
+}
+.kpi-etiqueta{font-size:.78rem; text-transform:uppercase; letter-spacing:.04em; color:var(--texto-suave)}
+.kpi-cifra{font-size:1.9rem; line-height:1.1; color:var(--azul); font-variant-numeric:tabular-nums}
+.kpi-cifra--texto{font-size:1.3rem}
+.kpi-pie{font-size:.8rem; color:var(--texto-suave)}
+
+/* ---------- Rejilla de gráficos ---------- */
+.graficos{display:grid; gap:14px; grid-template-columns:repeat(auto-fit, minmax(min(460px, 100%), 1fr)); margin-bottom:18px}
+.panel-grafico{padding:16px 18px 10px}
+.panel-grafico--ancho{grid-column:1 / -1}
+
+.gr-cabecera{margin:0 0 14px}
+.gr-cabecera h3{margin:0; font-size:1.02rem; color:var(--texto)}
+.gr-cabecera p{margin:2px 0 0; font-size:.83rem; color:var(--texto-suave)}
+.gr-vacio{margin:18px 0 22px; color:var(--texto-suave); font-size:.88rem; text-align:center}
+
+/* ---------- Barras verticales ---------- */
+.gr-lienzo{position:relative; padding-top:6px}
+.gr-rejilla{position:absolute; inset:22px 0 26px; display:flex; flex-direction:column; justify-content:space-between; pointer-events:none}
+.gr-rejilla i{display:block; border-top:1px solid var(--borde); opacity:.55}
+
+.gr-barras{
+  position:relative; list-style:none; margin:0; padding:0;
+  display:flex; align-items:flex-end; gap:3px; min-height:186px;
+}
+.gr-barra{
+  flex:1 1 0; min-width:0; display:flex; flex-direction:column;
+  align-items:center; justify-content:flex-end; gap:4px; height:186px;
+}
+.gr-valor{
+  font-size:.7rem; color:var(--texto-suave); font-variant-numeric:tabular-nums;
+  opacity:0; transition:opacity .12s;
+}
+/* Etiqueta directa solo en la cima: un número por barra es ruido */
+.gr-valor--cima{opacity:1; color:var(--azul); font-weight:600}
+.gr-barra:hover .gr-valor{opacity:1}
+
+.gr-marca{
+  width:100%; max-width:34px; height:var(--h); min-height:3px;
+  background:var(--serie); border-radius:4px 4px 0 0;
+  box-shadow:0 0 0 2px var(--papel);
+  transition:filter .12s;
+}
+.gr-barra:hover .gr-marca{filter:brightness(1.12)}
+.gr-eje{font-size:.68rem; color:var(--texto-suave); white-space:nowrap}
+.gr-eje--muda{visibility:hidden}
+
+/* ---------- Ranking horizontal ---------- */
+.rank{list-style:none; margin:0 0 10px; padding:0; display:flex; flex-direction:column; gap:9px}
+.rank li{display:grid; grid-template-columns:minmax(0,1fr) 40% auto; align-items:center; gap:10px}
+.rank-nombre{
+  font-size:.86rem; color:var(--texto); overflow:hidden;
+  text-overflow:ellipsis; white-space:nowrap;
+}
+.rank-pista{display:block; height:9px; border-radius:5px; background:var(--pista); overflow:hidden}
+.rank-pista i{display:block; width:var(--w); height:100%; border-radius:5px; background:var(--serie)}
+.rank-cifra{font-size:.82rem; color:var(--texto-suave); font-variant-numeric:tabular-nums; white-space:nowrap}
+
+.acciones-resumen{list-style:none; margin:0 0 10px; padding:0; display:flex; flex-direction:column; gap:8px}
+.acciones-resumen li{display:flex; align-items:center; justify-content:space-between; gap:10px}
+.acciones-resumen b{font-variant-numeric:tabular-nums; color:var(--texto)}
+
+/* ---------- Recorrido de una sesión ---------- */
+.migas{margin:0 0 12px; font-size:.88rem}
+.migas a{color:var(--azul); text-decoration:none}
+.migas a:hover{text-decoration:underline}
+
+.recorrido{list-style:none; margin:0; padding:0; display:flex; flex-direction:column}
+.recorrido li{
+  display:grid; grid-template-columns:72px minmax(0,1fr) auto; gap:12px; align-items:center;
+  padding:11px 0; border-bottom:1px solid var(--borde);
+}
+.recorrido li:last-child{border-bottom:0}
+.recorrido-hora{font-size:.8rem; color:var(--texto-suave); font-variant-numeric:tabular-nums}
+.recorrido-cuerpo{display:flex; flex-direction:column; gap:4px; min-width:0}
+.recorrido-titulo{font-size:.92rem; color:var(--texto)}
+.recorrido-url{font-size:.76rem; color:var(--texto-suave); overflow:hidden; text-overflow:ellipsis; white-space:nowrap}
+.recorrido-tiempo{font-size:.86rem; font-weight:600; color:var(--azul); font-variant-numeric:tabular-nums}
+
+/* ---------- Bitácora ---------- */
+.bitacora{list-style:none; margin:0; padding:0; display:flex; flex-direction:column}
+.bit{
+  display:grid; grid-template-columns:64px minmax(0,1fr); gap:12px;
+  padding:12px 0 12px 12px; border-bottom:1px solid var(--borde);
+  box-shadow:inset 3px 0 0 var(--borde-fuerte);
+}
+.bit:last-child{border-bottom:0}
+.bit--verde{box-shadow:inset 3px 0 0 var(--verde)}
+.bit--rojo{box-shadow:inset 3px 0 0 var(--rojo)}
+.bit--ambar{box-shadow:inset 3px 0 0 var(--ambar)}
+.bit--tinta{box-shadow:inset 3px 0 0 var(--azul-solido)}
+.bit-hora{display:flex; flex-direction:column; font-variant-numeric:tabular-nums}
+.bit-hora b{font-size:.92rem; color:var(--texto)}
+.bit-hora span{font-size:.74rem; color:var(--texto-suave)}
+.bit-cuerpo{display:flex; flex-direction:column; gap:5px; min-width:0}
+.bit-titulo{display:flex; align-items:center; gap:8px; flex-wrap:wrap; font-size:.92rem; color:var(--texto)}
+.bit-pie{font-size:.76rem; color:var(--texto-suave)}
+.bit-datos summary{font-size:.76rem; color:var(--azul); cursor:pointer; width:max-content}
+.bit-datos pre{
+  margin:6px 0 0; padding:9px 11px; font-size:.74rem; line-height:1.5;
+  background:var(--fondo-hundido); border:1px solid var(--borde); border-radius:9px;
+  overflow:auto; max-height:220px; color:var(--texto-suave);
+}
+
+.pastilla--verde{background:var(--verde-tenue); color:var(--verde-oscuro)}
+.pastilla--rojo{background:var(--rojo-tenue); color:var(--rojo-oscuro)}
+.pastilla--ambar{background:var(--ambar-tenue); color:var(--ambar)}
+.pastilla--tinta{background:var(--azul-tenue); color:var(--azul)}
+
+/* ---------- Pantallas chicas ---------- */
+@media (max-width:640px){
+  .rank li{grid-template-columns:minmax(0,1fr) auto; }
+  .rank-pista{grid-column:1 / -1}
+  .recorrido li{grid-template-columns:60px minmax(0,1fr); }
+  .recorrido-tiempo{grid-column:2; justify-self:start}
+  .gr-barras,.gr-barra{min-height:150px; height:150px}
+}
+
+/* ---------- Documentación ---------- */
+.doc-traza{margin-top:18px}
+.doc-cuerpo{padding:4px 20px 20px; max-width:88ch}
+.doc-cuerpo h3{margin:16px 0 4px; font-size:.95rem; color:var(--azul)}
+.doc-cuerpo h3:first-child{margin-top:6px}
+.doc-cuerpo p{margin:0; font-size:.88rem; line-height:1.6; color:var(--texto-suave)}
+.doc-cuerpo b{color:var(--texto)}
